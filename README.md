@@ -21,7 +21,7 @@
 - Custom Login: 
 	- Standard Play Framework login was not used.
 - Database (Steps): 
-	1. Create database in MySql.
-	2. Configure connection with this database in session "db" on "application.conf" file.
-	3. Access "127.0.0.1:9000" for automatic generation of table creation script. 
-    	4. Run the attached *.sql file (user.sql) to create a user default.
+	1- Create database in MySql.
+	2- Configure connection with this database in session "db" on "application.conf" file.
+	3- Access "127.0.0.1:9000" for automatic generation of table creation script. 
+    	4- Run the attached *.sql file (user.sql) to create a user default.
