@@ -1,0 +1,31 @@
+# Routes
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file                       controllers.Assets.versioned(path="/public", file: Asset)
+
+# HomeController
+GET     /                                   controllers.HomeController.index
+
+# AuthorController
+GET     /author                             controllers.AuthorController.index
+GET     /author/create                      controllers.AuthorController.create
+POST	/author/create                      controllers.AuthorController.save
+GET     /author/edit/:id                    controllers.AuthorController.edit(id : Integer)
+POST    /author/edit/:id                    controllers.AuthorController.update(id : Integer)
+GET     /author/delete/:id 			        controllers.AuthorController.delete(id : Integer)
+GET     /author/details/:id                 controllers.AuthorController.details(id : Integer)
+GET     /author/picture/:id                 controllers.AuthorController.picture(id : Integer)
+
+# BookController
+GET     /author/:id/book/create             controllers.BookController.create(id : Integer)
+POST	/author/:id/book/create             controllers.BookController.save(id : Integer)
+GET     /author/:id/book/edit/:isbn         controllers.BookController.edit(id : Integer, isbn : String)
+POST    /author/:id/book/edit/:isbn         controllers.BookController.update(id : Integer, isbn : String)
+GET     /author/:id/book/delete/:isbn 	    controllers.BookController.delete(id : Integer, isbn : String)
+GET     /author/:id/book/details/:isbn      controllers.BookController.details(id : Integer, isbn : String)
+GET     /author/:id/book/picture/:isbn      controllers.BookController.picture(id : Integer, isbn : String)
+
+# LoginController
+GET     /login                              controllers.LoginController.login
+POST    /login                              controllers.LoginController.authenticate
+GET     /logout                             controllers.LoginController.logout

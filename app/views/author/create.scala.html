@@ -1,0 +1,84 @@
+@(frm : Form[Author], errors : Set[services.ErrorClass], _token : String)
+
+@import helper._
+
+@layout(""){
+    <div class="container">
+        <div class="row">
+            <div class="col-md-offset-2 col-md-8 col-md-offset-2">
+            <h3>Author</h3>
+            <h1>CREATE</h1>
+            <hr>
+
+            @if(errors.size > 0){
+            <div class="errors">
+                <h4>Errors:</h4>
+                <ul>
+                    @for(error <- errors){
+                    <li>@error.getMessage()</li>
+                    }
+                </ul>
+            </div>
+            <br>
+            }
+
+            @helper.form(action = routes.AuthorController.save(), 'enctype -> "multipart/form-data"){
+                <input type="hidden" value="@_token" id="token" name="token">
+
+                <div class="form-group">
+                    <label for="">Name</label>
+                    @helper.inputText(frm("name"), '_label -> "", 'class -> "form-control")
+                </div>
+
+                <div class="form-group">
+                    <label for="">Artistic Name</label>
+                    @helper.inputText(frm("artisticName"), '_label -> null, 'class -> "form-control")
+                </div>
+
+                <div class="form-group">
+                    <label for="">Birthday</label>
+                    <div class="input-append date form_datetime" data-date="">
+                        @helper.inputText(frm("birthday"), '_label -> null, 'class -> "form-control", 'readonly -> "readonly")
+                        <span class="add-on"><i class="icon-remove"></i></span>
+                        <span class="add-on"><i class="icon-th"></i></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="">Gender</label>
+                    @select(field = frm("gender"), options = Seq("M" -> "Male", "F" -> "Female"), '_label -> null, 'class -> "form-control")
+                </div>
+
+                <div class="form-group">
+                    <label for="">Biography</label>
+                    @textarea(field = frm("biography"), args = 'rows -> 3, 'cols -> 50, '_label -> null, 'class -> "form-control")
+                </div>
+
+                <div class="form-group">
+                    <label for="">E-mail</label>
+                    @helper.inputText(frm("email"), '_label -> null, 'class -> "form-control")
+                </div>
+
+                <div class="form-group">
+                    <label>Picture</label>
+                    <input type="file" id="picture" name="picture" class="form-control"><br>
+                </div>
+
+                <div class="form-group">
+                    <hr>
+                </div>
+
+                <!-- Actions -->
+                <div class="form-group">
+                    <input type="submit" class="pull-right btn btn-success col-md-2" value="CREATE" id="btnCreate">
+                    <input type="reset" class="pull-right btn btn-info col-md-2" value="RESET" id="btnReset">
+                    <a href="@routes.AuthorController.index()" class="pull-right btn btn-default col-md-2">CANCEL</a>
+                </div>
+                <!-- Actions -->
+                }
+
+            </div>
+        </div>
+    </div>
+}
+

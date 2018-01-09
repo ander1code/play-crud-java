@@ -1,0 +1,44 @@
+
+.errors {
+	border: 2px solid red;
+	background-color: #fff68f;
+	color: red;
+	border-radius: 5px;
+}
+
+textarea {
+	resize: none;
+	border: 2px solid black !important;
+}
+
+input[type=text],
+input[type=file],
+input[type=password],
+select {
+	border: 2px solid black !important;
+}
+
+.img-details {
+	width: 200px;
+	height: 200px;
+	border-radius: 5px;
+	border: 3px solid black;
+}
+
+th {
+	font-weight: bold;
+	font-size: 14px;
+}
+
+.col-center {
+	text-align: center;
+}
+
+.img-select {
+	width: 25px;
+}
+
+#bookartisticName {
+	font-weight: bold;
+	background-color: #bfbbbb;
+}

@@ -1,0 +1,55 @@
+@(frm : Form[User], errors : Set[services.ErrorClass], _token : String)
+
+@import helper._
+
+@layout(""){
+    <div class="container">
+        <div class="row">
+            <div class="col-md-offset-2 col-md-8 col-md-offset-2">
+                <h3>User</h3>
+                <h1>Login</h1>
+                <hr>
+                @for(key <- Array("danger","success","warning")){
+                    @if(flash.containsKey(key)){
+                    <div class="alert alert-@key">
+                        @flash.get(key)
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close"><i class="glyphicon glyphicon-remove"></i></a>
+                    </div>
+                    }
+                }
+
+                @if(errors.size > 0){
+                    <div class="errors">
+                        <h4>Errors:</h4>
+                        <ul>
+                        @for(error <- errors){
+                            <li>@error.getMessage()</li>
+                        }
+                        </ul>
+                    </div>
+                    <br>
+                }
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-offset-4 col-md-4 col-md-offset-4">
+                @helper.form(action = routes.LoginController.authenticate()){
+                    <input type="hidden" value="@_token" id="token" name="token">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" value="Admin" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Password</label>
+                        <input type="password" id="password" name="password" placeholder="Admin121181" class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" class="pull-right btn btn-success col-md-3" value="Login&nbsp" id="btnLogin">
+                        <a href="@routes.HomeController.index()" class="pull-right btn btn-default col-md-3">Cancel</a>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+}

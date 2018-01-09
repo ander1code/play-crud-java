@@ -1,0 +1,97 @@
+@(author : Author, books : List[Book], picture : java.awt.image.BufferedImage)
+@import helper._
+
+@layout(""){
+	<div class="container">
+		<div class="row">
+			<div class="col-md-offset-2 col-md-8 col-md-offset-2">
+
+				<h3>Author</h3>
+				<h1>DETAILS</h1>
+				<hr>
+
+				<div class="row">
+					<div class="col-md-12">
+						@for(key <- Array("danger","success","warning")){
+							@if(flash.containsKey(key)){
+							<div class="alert alert-@key">
+								@flash.get(key)
+								<a href="#" class="close" data-dismiss="alert" aria-label="close"><i class="glyphicon glyphicon-remove"></i></a>
+							</div>
+							}
+						}
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label for="">Name</label>
+							<p>@author.getName()</p>
+						</div>
+						<div class="form-group">
+							<label for="">Artistic Name</label>
+							<p>@author.getArtisticName()</p>
+						</div>
+						<div class="form-group">
+							<label for="">Birthday</label>
+							<p>@author.getBirthday().format("dd/MM/yyyy")</p>
+						</div>
+						<div class="form-group">
+							<label for="">E-mail</label>
+							<p>@author.getEmail()</p>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<p><img src="@routes.Assets.versioned("pictures/picture_author.jpg")" class="img-details"></p>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-12">
+						<div class="form-group">
+							<label for="">Biography</label>
+							<p>@author.getBiography()</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-12">
+						<div class="form-group">
+							<a href="@routes.AuthorController.edit(author.getId())" class="btn btn-warning col-md-2 pull-right">EDIT</a>
+							<a href="@routes.AuthorController.index()" class="btn btn-default col-md-2 pull-right">CANCEL</a>
+						</div>
+					</div>
+				</div>
+
+				<hr>
+
+				<h3>Books</h3>
+				<div class="table-responsive">
+					<table class="table">
+						<tr>
+							<th>Title</th>
+							<th class="col-center">SELECT</th>
+						</tr>
+						@if(books != null){
+							@for(book <- books){
+							<tr>
+								<td>@book.getTitle()</td>
+								<td class="col-center"><a href="@routes.BookController.details(author.getId(), book.getIsbn())"><img src="@routes.Assets.versioned("images/select.png")" class="img-select"></a></td>
+							</tr>
+							}
+						}
+					</table>
+				</div>
+				<hr>
+				<a href="@routes.BookController.create(author.getId())" class="pull-right col-md-2 btn btn-success">CREATE</a>
+			</div>
+		</div>
+	</div>
+}
+
+
+

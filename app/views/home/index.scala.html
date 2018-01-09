@@ -1,0 +1,33 @@
+@(title : String)
+
+@import helper._
+
+@layout(""){
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                @for(key <- Array("danger","success","warning")){
+                    @if(flash.containsKey(key)){
+                    <div class="alert alert-@key">
+                        @flash.get(key)
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close"><i class="glyphicon glyphicon-remove"></i></a>
+                    </div>
+                    }
+                }
+                <h1>@title</h1>
+                <hr>
+                <div class="jumbotron" style="border:3px solid black">
+                    <p>Prototype of a CRUD developed with Play Framework (Java) and MySQL. In this CRUD, an author has one or more books registered in their name.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-offset-8 col-md-4">
+                <img src="@routes.Assets.versioned("images/play-logo.png")" class="prod-logo">
+                <img src="@routes.Assets.versioned("images/java-logo.png")" class="prod-logo">
+                <img src="@routes.Assets.versioned("images/mysql-logo.png")" class="prod-logo">
+            </div>
+        </div>
+    </div>
+}
+

@@ -1,0 +1,123 @@
+@(frm : Form[Author], errors : Set[services.ErrorClass], _token : String)
+
+@import java.lang.Integer; var id=frm.get ().getId()
+
+@import helper._
+
+@layout(""){
+<div class="container">
+	<div class="row">
+		<div class="col-md-offset-2 col-md-8 col-md-offset-2">
+			<h3>Author</h3>
+			<h1>EDIT</h1>
+			<hr>
+
+			@if(errors.size > 0){
+			<div class="errors">
+				<h4>Errors:</h4>
+				<ul>
+					@for(error <- errors){
+					<li>@error.getMessage()</li>
+					}
+				</ul>
+			</div>
+			<br>
+			}
+
+			@helper.form(action = routes.AuthorController.update(id), 'enctype -> "multipart/form-data"){
+			<input type="hidden" value="@_token" id="token" name="token">
+
+			<div class="form-group">
+				<label for="">Name</label>
+				@helper.inputText(frm("name"), '_label -> "", 'class -> "form-control")
+			</div>
+
+			<div class="form-group">
+				<label for="">Artistic Name</label>
+				@helper.inputText(frm("artisticName"), '_label -> null, 'class -> "form-control")
+			</div>
+
+			<div class="form-group">
+				<label for="">Birthday</label>
+				<div class="input-append date form_datetime" data-date="">
+					@helper.inputText(frm("birthday"), '_label -> null, 'class -> "form-control", 'readonly -> "readonly")
+					<span class="add-on"><i class="icon-remove"></i></span>
+					<span class="add-on"><i class="icon-th"></i></span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="">Gender</label>
+				@select(field = frm("gender"), options = Seq("M" -> "Male", "F" -> "Female"), '_label -> null, 'class -> "form-control")
+			</div>
+
+			<div class="form-group">
+				<label for="">Biography</label>
+				@textarea(field = frm("biography"), args = 'rows -> 3, 'cols -> 50, '_label -> null, 'class -> "form-control")
+			</div>
+
+			<div class="form-group">
+				<label for="">E-mail</label>
+				@helper.inputText(frm("email"), '_label -> null, 'class -> "form-control")
+			</div>
+
+			<div class="form-group">
+				<label>Picture</label>
+				<a href="@routes.Assets.versioned("pictures/picture_author.jpg")">Current Image</a>
+				<input type="file" id="picture" name="picture" class="form-control"><br>
+			</div>
+
+			<div class="form-group">
+				<hr>
+			</div>
+
+			<!-- Actions -->
+			<div class="form-group">
+				<button type="button" class="btn btn-warning col-md-2 pull-right" data-toggle="modal" data-target="#modalEdit">EDIT</button>
+				<a href="@routes.AuthorController.index()" class="btn btn-default col-md-2 pull-right">CANCEL</a>
+				<button type="button" class="btn btn-danger col-md-2 pull-right" data-toggle="modal" data-target="#modalDelete">DELETE</button>
+			</div>
+			<!-- Actions -->
+
+			<div id="modalEdit" class="modal fade" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title">Question</h4>
+						</div>
+						<div class="modal-body">
+							<p>Do you want edit this author?</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+							<input type="submit" value="Yes" id="btnEdit" class="btn btn-warning">
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="modalDelete" class="modal fade" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title">Question</h4>
+						</div>
+						<div class="modal-body">
+							<p>Do you want delete this author?</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+							<a href='/author/delete/@frm("id").value' class="btn btn-danger">Yes</a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			}
+
+		</div>
+	</div>
+</div>
+}

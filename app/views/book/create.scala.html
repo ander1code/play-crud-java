@@ -1,0 +1,72 @@
+@(author : Author, frm : Form[Book], errors : Set[services.ErrorClass], _token : String)
+
+@import helper._
+
+@layout(""){
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-offset-2 col-md-8 col-md-offset-2">
+
+        <h3>Book</h3>
+        <h1>CREATE</h1>
+        <hr>
+
+        @if(errors.size > 0){
+            <div class="errors">
+                <h4>Errors:</h4>
+                <ul>
+                    @for(error <- errors){
+                    <li>@error.getMessage()</li>
+                    }
+                </ul>
+            </div>
+            <br>
+         }
+
+        <label>Author</label>
+            <div class="form-group">
+                <input type="hidden" name="id" value="@author.getId()">
+                <input type="text" name="name" id="bookartisticName" value="@author.getArtisticName()" class="form-control" readonly>
+            </div>
+        <hr>
+
+        @helper.form(action = routes.BookController.save(author.getId()), 'enctype -> "multipart/form-data"){
+            <input type="hidden" value="@_token" id="token" name="token">
+
+            <div class="form-group">
+                <label for="">ISBN</label>
+                @helper.inputText(frm("isbn"), '_label -> null, 'class -> "form-control")
+            </div>
+
+            <div class="form-group">
+                <label for="">Title</label>
+                @helper.inputText(frm("title"), '_label -> null, 'class -> "form-control")
+            </div>
+
+            <div class="form-group">
+                <label for="">Price</label>
+                @helper.inputText(frm("price"), '_label -> null, 'class -> "form-control")
+            </div>
+
+            <div class="form-group">
+                <label>Picture</label>
+                <input type="file" id="picture" name="picture" class="form-control"><br>
+            </div>
+
+            <div class="form-group">
+                <hr>
+            </div>
+
+            <!-- Actions -->
+            <div class="form-group">
+                <input type="submit" value="Create" id="btnCreateBook" class="btn btn-success col-md-2 pull-right">
+                <input type="reset" value="Reset" id="btnResetBook" class="btn btn-info col-md-2 pull-right">
+                <a href="@routes.AuthorController.details(author.getId())" class="btn btn-default col-md-2 pull-right">Cancel</a>
+            </div>
+            <!-- Actions -->
+        }
+        </div>
+    </div>
+</div>
+}
