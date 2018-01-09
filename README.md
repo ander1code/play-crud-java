@@ -1,4 +1,4 @@
-# PlayCrud
+# play-crudjava
 
 ## 1 - Description:
 - Prototype of a CRUD developed with Play Framework (Java) and MySQL.
