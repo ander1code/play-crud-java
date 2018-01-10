@@ -3,7 +3,6 @@ package services;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import models.*;
 
 public class Validation {
@@ -161,7 +160,7 @@ public class Validation {
 
     /* Book's Validations */
 
-    public static Set<ErrorClass> ValidateDataBook (String title, String isbn, Float price, byte[] picture) {
+    public static Set<ErrorClass> ValidateDataBook (String title, String isbn, Double price, byte[] picture) {
 
         Validation.result = true;
         Validation.errors.clear ();
@@ -172,7 +171,7 @@ public class Validation {
         return errors;
     }
 
-    public static Set<ErrorClass> ValidateDataBook (String title, Float price, byte[] picture) {
+    public static Set<ErrorClass> ValidateDataBook (String title, Double price, byte[] picture) {
 
         Validation.result = true;
         Validation.errors.clear ();
@@ -182,7 +181,7 @@ public class Validation {
         return errors;
     }
 
-    public static Set<ErrorClass> ValidateDataBook (String title, Float price) {
+    public static Set<ErrorClass> ValidateDataBook (String title, Double price) {
 
         Validation.result = true;
         Validation.errors.clear ();
@@ -237,7 +236,7 @@ public class Validation {
         return false;
     }
 
-    private static void ValidatePrice (Float price) {
+    private static void ValidatePrice (Double price) {
 
         if (price.toString () != "") {
             if (price < 0) {

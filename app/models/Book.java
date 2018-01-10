@@ -21,7 +21,7 @@ public class Book extends Model {
     private String title;
 
     @Column(precision = 12, scale = 2)
-    private Float price;
+    private Double price;
 
     @Lob
     private byte[] picture;
@@ -29,7 +29,7 @@ public class Book extends Model {
     public Book () {
     }
 
-    public Book (Integer id, Author author, String isbn, String title, Float price, byte[] picture) {
+    public Book (Integer id, Author author, String isbn, String title, Double price, byte[] picture) {
         this.setId (id);
         this.setAuthor (author);
         this.setIsbn (isbn);
@@ -62,11 +62,11 @@ public class Book extends Model {
         this.title = title;
     }
 
-    public Float getPrice () {
+    public Double getPrice () {
         return price;
     }
 
-    public void setPrice (Float price) {
+    public void setPrice (Double price) {
         this.price = price;
     }
 

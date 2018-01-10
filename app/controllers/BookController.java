@@ -57,7 +57,7 @@ public class BookController extends Controller {
         if (author != null) {
             Form<Book> frm = formFactory.form (Book.class).bindFromRequest ();
             if(frm.data().get("price").equals("")){
-                frm.get().setPrice(0f);
+                frm.get().setPrice(Double.parseDouble("0.0"));
             }
             Http.MultipartFormData<File> body = request ().body ().asMultipartFormData ();
             Http.MultipartFormData.FilePart<File> picture = body.getFile ("picture");
@@ -107,7 +107,7 @@ public class BookController extends Controller {
                 Form<Book> frm = formFactory.form (Book.class).bindFromRequest ();
 
                 if(frm.data().get("price").equals("")){
-                    frm.get().setPrice(0f);
+                    frm.get().setPrice(Double.parseDouble("0"));
                 }
 
                 Set<ErrorClass> errors = Validation.ValidateDataBook (frm.get ().getTitle (), frm.get ().getPrice ());

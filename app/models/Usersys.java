@@ -5,7 +5,7 @@ import com.avaje.ebean.Model;
 import javax.persistence.*;
 
 @Entity
-public class User extends Model{
+public class Usersys extends Model{
 
     @Id
     private Integer id;
@@ -14,7 +14,7 @@ public class User extends Model{
     private String username;
 
     @Column(length = 128)
-    private String password;
+    private String userpass;
 
     public Integer getId() {
         return id;
@@ -32,13 +32,13 @@ public class User extends Model{
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public String getUserpass() {
+        return userpass;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setUserpass(String userpass) {
+        this.userpass = userpass;
     }
 
-    public static Finder<Integer, User> find = new Model.Finder<>(User.class);
+    public static Finder<Integer, Usersys> find = new Model.Finder<>(Usersys.class);
 }

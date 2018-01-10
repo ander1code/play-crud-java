@@ -4,34 +4,34 @@
 # --- !Ups
 
 create table author (
-  id                            integer auto_increment not null,
+  id                            serial not null,
   name                          varchar(100),
   artistic_name                 varchar(100),
   email                         varchar(100),
-  birthday                      datetime(6),
+  birthday                      timestamp,
   gender                        varchar(1),
   biography                     varchar(1000),
-  picture                       longblob,
+  picture                       bytea,
   constraint uq_author_email unique (email),
   constraint pk_author primary key (id)
 );
 
 create table book (
-  id                            integer auto_increment not null,
+  id                            serial not null,
   author_id                     integer,
   isbn                          varchar(13),
   title                         varchar(100),
   price                         float(12,2),
-  picture                       longblob,
+  picture                       bytea,
   constraint uq_book_isbn unique (isbn),
   constraint pk_book primary key (id)
 );
 
-create table user (
-  id                            integer auto_increment not null,
+create table usersys (
+  id                            serial not null,
   username                      varchar(128),
-  password                      varchar(128),
-  constraint pk_user primary key (id)
+  userpass                      varchar(128),
+  constraint pk_usersys primary key (id)
 );
 
 alter table book add constraint fk_book_author_id foreign key (author_id) references author (id) on delete restrict on update restrict;
@@ -40,12 +40,12 @@ create index ix_book_author_id on book (author_id);
 
 # --- !Downs
 
-alter table book drop foreign key fk_book_author_id;
-drop index ix_book_author_id on book;
+alter table if exists book drop constraint if exists fk_book_author_id;
+drop index if exists ix_book_author_id;
 
-drop table if exists author;
+drop table if exists author cascade;
 
-drop table if exists book;
+drop table if exists book cascade;
 
-drop table if exists user;
+drop table if exists usersys cascade;
 
