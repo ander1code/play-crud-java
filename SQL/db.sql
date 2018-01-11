@@ -18,7 +18,7 @@ id                            serial not null,
 author_id                     integer,
 isbn                          varchar(13),
 title                         varchar(100),
-price                         float(12,2),
+price                         decimal(12,2),
 picture                       bytea,
 constraint uq_book_isbn unique (isbn),
 constraint pk_book primary key (id)
@@ -34,4 +34,4 @@ constraint pk_usersys primary key (id)
 alter table book add constraint fk_book_author_id foreign key (author_id) references author (id) on delete restrict on update restrict;
 create index ix_book_author_id on book (author_id);
 
-rollback;
+commit;
