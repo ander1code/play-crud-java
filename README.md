@@ -4,7 +4,8 @@
 ![Framework](https://img.shields.io/badge/Play!%20Framework-green?style=flat&logo=play&logoColor=white) ![Framework](https://img.shields.io/badge/Bootstrap-purple?style=flat&logo=bootstrap&logoColor=white)  
 ![Database](https://img.shields.io/badge/PostgreSQL-blue?logo=postgresql&logoColor=white)  
 ![Platform: Web](https://img.shields.io/badge/Platform-Web-blue?logo=google-chrome)
-![Last Commit](https://img.shields.io/github/last-commit/ander1code/play-crudjava?color=yellow&logo=github) ![Size](https://img.shields.io/github/repo-size/ander1code/play-crudjava?color=blue&logo=files) ![License](https://img.shields.io/github/license/ander1code/play-crudjava?color=black&logo=open-source-initiative)
+
+![Last Commit](https://img.shields.io/github/last-commit/ander1code/play-crudjava?color=yellow&logo=github) 
 
 ---
 
