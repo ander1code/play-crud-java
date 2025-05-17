@@ -42,3 +42,22 @@ th {
 	font-weight: bold;
 	background-color: #bfbbbb;
 }
+
+body{
+	background-color:#b9e7c4;
+}
+
+
+.prod-logo{
+	width:30%;
+}
+
+.jumbotron{
+	color:white;
+	background-color:#303030;
+	border:3px solid white !important;
+}
+
+.picture{
+    border:2px solid black;text-align:right;height:150px;width:100px;margin-bottom:2%;
+}

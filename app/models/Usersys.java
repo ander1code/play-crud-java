@@ -1,11 +1,13 @@
 package models;
 
 //PlayBean (JDBC and ORM)
+
 import com.avaje.ebean.Model;
+
 import javax.persistence.*;
 
 @Entity
-public class Usersys extends Model{
+public class Usersys extends Model {
 
     @Id
     private Integer id;

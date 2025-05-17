@@ -1,0 +1,21 @@
+.errors-view {
+	text-align: center;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+.number-error {
+	font-size: 400px;
+	margin-top: 5%;
+}
+
+.margin-error-message {
+	margin-top: -30%;
+}
+
+.title-error {
+	font-weight: bold;
+}
+
+body{
+	background-color:#b9e7c4;
+}

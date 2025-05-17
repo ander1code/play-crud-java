@@ -11,8 +11,8 @@ GET     /author                             controllers.AuthorController.index
 GET     /author/create                      controllers.AuthorController.create
 POST	/author/create                      controllers.AuthorController.save
 GET     /author/edit/:id                    controllers.AuthorController.edit(id : Integer)
-POST    /author/edit/:id                    controllers.AuthorController.update(id : Integer)
-GET     /author/delete/:id 			        controllers.AuthorController.delete(id : Integer)
+POST    /author/edit                        controllers.AuthorController.update
+GET     /author/delete  			        controllers.AuthorController.delete
 GET     /author/details/:id                 controllers.AuthorController.details(id : Integer)
 GET     /author/picture/:id                 controllers.AuthorController.picture(id : Integer)
 

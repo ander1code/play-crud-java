@@ -10,5 +10,5 @@ libraryDependencies += jdbc
 libraryDependencies += javaJdbc
 libraryDependencies += cache
 libraryDependencies += javaWs
-libraryDependencies += "org.postgresql" % "postgresql" % "42.1.4"
+libraryDependencies += "org.xerial" % "sqlite-jdbc" % "3.49.1.0"
 libraryDependencies += filters

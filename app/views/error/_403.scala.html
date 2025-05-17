@@ -1,12 +1,21 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>403 - Forbidden</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>403 Forbidden</title>
+	<link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/error.css")">
 </head>
+
 <body>
-<img src="@routes.Assets.versioned("images/403.png")" alt="">
+    <div class="errors-view">
+        <p class="number-error">403</p>
+        <div class="margin-error-message">
+            <p class="title-error">403 Forbidden</p>
+            <p>Oops! You do not have permission to access this page. <br>Please check your credentials or contact the administrator. <br>If you believe this is a mistake, try again later.</p>
+        </div>
+    </div>
 </body>
+
 </html>

@@ -24,7 +24,7 @@
 			<br>
 			}
 
-			@helper.form(action = routes.AuthorController.update(id), 'enctype -> "multipart/form-data"){
+			@helper.form(action = routes.AuthorController.update, 'enctype -> "multipart/form-data"){
 			<input type="hidden" value="@_token" id="token" name="token">
 
 			<div class="form-group">
@@ -58,14 +58,14 @@
 
 			<div class="form-group">
 				<label for="">E-mail</label>
-				@helper.inputText(frm("email"), '_label -> null, 'class -> "form-control")
+				@helper.inputText(frm("email"), '_label -> null, 'class -> "form-control", 'readonly -> "readonly")
 			</div>
 
-			<div class="form-group">
-				<label>Picture</label>
-				<a href="@routes.Assets.versioned("pictures/picture_author.jpg")">Current Image</a>
-				<input type="file" id="picture" name="picture" class="form-control"><br>
-			</div>
+            <div class="form-group">
+                <label>Picture</label>
+                <a href="@routes.Assets.versioned("pictures/picture_author.jpg")"><img align="right" class="picture" src="@routes.Assets.versioned("pictures/picture_author.jpg")"></a>
+                <input type="file" id="picture" name="picture" class="form-control"><br>
+            </div>
 
 			<div class="form-group">
 				<hr>
@@ -73,9 +73,9 @@
 
 			<!-- Actions -->
 			<div class="form-group">
-				<button type="button" class="btn btn-warning col-md-2 pull-right" data-toggle="modal" data-target="#modalEdit">EDIT</button>
-				<a href="@routes.AuthorController.index()" class="btn btn-default col-md-2 pull-right">CANCEL</a>
-				<button type="button" class="btn btn-danger col-md-2 pull-right" data-toggle="modal" data-target="#modalDelete">DELETE</button>
+				<button type="button" class="btn btn-warning col-md-2 pull-right" data-toggle="modal" data-target="#modalEdit">Edit</button>
+				<a href="@routes.AuthorController.index()" class="btn btn-default col-md-2 pull-right">Cancel</a>
+				<button type="button" class="btn btn-danger col-md-2 pull-right" data-toggle="modal" data-target="#modalDelete">Delete</button>
 			</div>
 			<!-- Actions -->
 
@@ -109,7 +109,7 @@
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-							<a href='/author/delete/@frm("id").value' class="btn btn-danger">Yes</a>
+							<a href='/author/delete' class="btn btn-danger">Yes</a>
 						</div>
 					</div>
 				</div>

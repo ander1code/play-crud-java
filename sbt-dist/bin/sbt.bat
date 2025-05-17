@@ -1,28 +1,27 @@
 @REM SBT launcher script
-@REM 
-@REM Envioronment:
+
+@REM Environment:
 @REM JAVA_HOME - location of a JDK home dir (mandatory)
 @REM SBT_OPTS  - JVM options (optional)
 @REM Configuration:
 @REM sbtconfig.txt found in the SBT_HOME.
 
-@REM   ZOMG! We need delayed expansion to build up CFG_OPTS later 
+@REM We need delayed expansion to build up CFG_OPTS later
 @setlocal enabledelayedexpansion
 
 @echo off
 set SBT_HOME=%~dp0
 
-rem FIRST we load the config file of extra options.
+rem Load the config file of extra options.
 set FN=%SBT_HOME%\..\conf\sbtconfig.txt
 set CFG_OPTS=
 FOR /F "tokens=* eol=# usebackq delims=" %%i IN ("%FN%") DO (
   set DO_NOT_REUSE_ME=%%i
-  rem ZOMG (Part #2) WE use !! here to delay the expansion of
-  rem CFG_OPTS, otherwise it remains "" for this loop.
+  rem Use delayed expansion for CFG_OPTS
   set CFG_OPTS=!CFG_OPTS! !DO_NOT_REUSE_ME!
 )
 
-rem We use the value of the JAVACMD environment variable if defined
+rem Use the value of the JAVACMD environment variable if defined
 set _JAVACMD=%JAVACMD%
 
 if "%_JAVACMD%"=="" (
@@ -33,7 +32,7 @@ if "%_JAVACMD%"=="" (
 
 if "%_JAVACMD%"=="" set _JAVACMD=java
 
-rem We use the value of the JAVA_OPTS environment variable if defined, rather than the config.
+rem Use the value of the JAVA_OPTS environment variable if defined, otherwise use the config.
 set _JAVA_OPTS=%JAVA_OPTS%
 if "%_JAVA_OPTS%"=="" set _JAVA_OPTS=%CFG_OPTS%
 
@@ -47,7 +46,9 @@ goto end
 @endlocal
 exit /B 1
 
-
 :end
 @endlocal
 exit /B 0
+
+rem Limit memory usage to 256MB
+java -Xmx256M -Xms256M -XX:MaxMetaspaceSize=256M -jar sbt-launch.jar %*

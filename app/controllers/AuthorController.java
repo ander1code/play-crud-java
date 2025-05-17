@@ -26,7 +26,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
+import java.util.Comparator;
 
 public class AuthorController extends Controller {
 
@@ -35,24 +35,30 @@ public class AuthorController extends Controller {
 
     private static String token = null;
 
+    private Integer id = null;
+
     @Security.Authenticated(Secured.class)
     public Result index() {
         List<Author> authors = Author.find.all();
+        authors.sort(Comparator.comparing(Author::getId).reversed());
         return ok(index.render(authors));
     }
 
     @Security.Authenticated(Secured.class)
     public Result create() {
+        generateToken();
         Form<Author> frm = formFactory.form(Author.class);
-        AuthorController.GenerateToken();
         return ok(create.render(frm, new HashSet<>(), token));
     }
 
     @Security.Authenticated(Secured.class)
     public Result save() {
+
         Form<Author> frm = formFactory.form(Author.class).bindFromRequest();
 
-        if (!(session("token").toString().equals(frm.data().get("token").toString()))) {
+        String sessionToken = session("token");
+        String formToken = frm.data().get("token");
+        if (sessionToken == null || formToken == null || !sessionToken.equals(formToken)) {
             return forbidden(_403.render());
         }
 
@@ -60,18 +66,19 @@ public class AuthorController extends Controller {
 
         Http.MultipartFormData<File> body = request().body().asMultipartFormData();
         Http.MultipartFormData.FilePart<File> picture = body.getFile("picture");
-        Date birthday = frm.get().getBirthday();
-        Set<ErrorClass> errors = Validation.ValidateDataAuthor(frm.get().getName(), frm.get().getArtisticName(), frm.get().getEmail(), birthday, frm.get().getGender(), frm.get().getBiography(), Picture.FileToByte(picture));
+        frm.get().setPicture(Picture.FileToByte(picture));
+
+        Set<ErrorClass> errors = Validation.validateDataAuthor(1, frm.get());
 
         if (errors.isEmpty()) {
             Author author = frm.get();
             author.setPicture(Picture.FileToByte(picture));
             author.save();
-            flash("success", "Author successfully registered.");
+            flash("success", "Author successfully created.");
             return redirect(routes.AuthorController.index());
         } else {
-            AuthorController.GenerateToken();
-            return badRequest(create.render(frm, errors, AuthorController.token));
+            generateToken();
+            return badRequest(create.render(frm, errors, token));
         }
     }
 
@@ -79,73 +86,79 @@ public class AuthorController extends Controller {
     public Result edit(Integer id) {
         Author author = Author.find.byId(id);
         if (author != null) {
+            this.id = id;
             BufferedImage file = Picture.ByteToFile(author.getPicture(), 1);
             Form<Author> frm = formFactory.form(Author.class).fill(author);
-            AuthorController.GenerateToken();
+            AuthorController.generateToken();
             return ok(edit.render(frm, new HashSet<>(), AuthorController.token));
         }
         return notFound(_404.render());
     }
 
     @Security.Authenticated(Secured.class)
-    public Result update(Integer id) {
+    public Result update() {
         Form<Author> frm = formFactory.form(Author.class).bindFromRequest();
 
-        if (!(session("token").toString().equals(frm.data().get("token").toString()))) {
+        String sessionToken = session("token");
+        String formToken = frm.data().get("token");
+        if (!sessionToken.equals(formToken)) {
             return forbidden(_403.render());
         }
 
-        Author oldauthor = Author.find.byId(id);
-        if (!(oldauthor == null)) {
-            Http.MultipartFormData<File> body = request().body().asMultipartFormData();
-            Http.MultipartFormData.FilePart<File> picture = body.getFile("picture");
-            Set<ErrorClass> errors = null;
-
-            if (!(frm.get().getEmail().equals(oldauthor.getEmail()))) {
-                errors = Validation.ValidateDataAuthor(frm.get().getName(), frm.get().getArtisticName(), frm.get().getEmail(), frm.get().getBirthday(), frm.get().getGender(), frm.get().getBiography());
-            } else {
-                errors = Validation.ValidateDataAuthor(frm.get().getName(), frm.get().getArtisticName(), frm.get().getBirthday(), frm.get().getGender(), frm.get().getBiography());
-            }
-
-            if (errors.isEmpty()) {
-
-                oldauthor.setName(frm.get().getName());
-                oldauthor.setEmail(frm.get().getEmail().toLowerCase());
-                oldauthor.setBirthday(frm.get().getBirthday());
-                oldauthor.setBiography(frm.get().getBiography());
-                oldauthor.setArtisticName(frm.get().getArtisticName());
-                oldauthor.setGender(frm.get().getGender());
-
-                if (!(picture.getFilename().equals(""))) {
-                    oldauthor.setPicture(Picture.FileToByte(picture));
-                }
-
-                oldauthor.update();
-                flash("success", "Author successfully edited.");
-                return redirect(routes.AuthorController.details(id));
-            } else {
-                AuthorController.GenerateToken();
-                return badRequest(edit.render(frm, errors, AuthorController.token));
-            }
-        } else {
+        Author oldAuthor = Author.find.byId(this.id);
+        if (oldAuthor == null) {
             return notFound(_404.render());
         }
+
+        Http.MultipartFormData<File> body = request().body().asMultipartFormData();
+        Http.MultipartFormData.FilePart<File> picture = body.getFile("picture");
+        frm.get().setPicture(Picture.FileToByte(picture));
+
+        Author newAuthor = frm.get();
+        Set<ErrorClass> errors;
+
+        if (!newAuthor.getEmail().equals(oldAuthor.getEmail())) {
+            errors = Validation.validateDataAuthor(1, frm.get());
+        } else {
+            errors = Validation.validateDataAuthor(2, frm.get());
+        }
+
+        if (!errors.isEmpty()) {
+            AuthorController.generateToken();
+            return badRequest(edit.render(frm, errors, AuthorController.token));
+        }
+
+        oldAuthor.setName(newAuthor.getName());
+        // oldAuthor.setEmail(newAuthor.getEmail().toLowerCase());
+        oldAuthor.setBirthday(newAuthor.getBirthday());
+        oldAuthor.setBiography(newAuthor.getBiography());
+        oldAuthor.setArtisticName(newAuthor.getArtisticName());
+        oldAuthor.setGender(newAuthor.getGender());
+
+        if (picture != null && !picture.getFilename().isEmpty()) {
+            oldAuthor.setPicture(Picture.FileToByte(picture));
+        }
+
+        oldAuthor.update();
+        flash("success", "Author successfully edited.");
+        return redirect(routes.AuthorController.details(id));
     }
 
     @Security.Authenticated(Secured.class)
-    public Result delete(Integer id) {
+    public Result delete() {
 
-        if (!(session("token").toString().equals(AuthorController.token))) {
+        String sessionToken = session("token");
+        if (sessionToken == null || !sessionToken.equals(token)) {
             return forbidden(_403.render());
         }
 
-        Author author = Author.find.byId(id);
-        if (!(author == null)) {
-            if (Validation.DeleteAuthor(id)) {
+        Author author = Author.find.byId(this.id);
+        if (author != null) {
+            if (Validation.deleteAuthor(id)) {
                 author.delete();
                 flash("success", "Author successfully deleted.");
             } else {
-                flash("danger", "Author has one or more books registered and don't can be deleted.");
+                flash("danger", "Author has one or more books registered and cannot be deleted.");
             }
             return redirect(routes.AuthorController.index());
         } else {
@@ -158,7 +171,7 @@ public class AuthorController extends Controller {
         Author author = Author.find.byId(id);
         if (author != null) {
             BufferedImage file = Picture.ByteToFile(author.getPicture(), 1);
-            List<Book> books = Book.find.where().eq("author_id ", id).findList();
+            List<Book> books = Book.find.where().eq("author_id", id).findList();
             return ok(details.render(author, books, file));
         }
         return notFound(_404.render());
@@ -173,9 +186,9 @@ public class AuthorController extends Controller {
         return notFound(_404.render());
     }
 
-    private static void GenerateToken(){
-        AuthorController.token = Token.generateToken();
-        session().remove("token");
-        session("token", AuthorController.token);
+    private static void generateToken() {
+        token = Token.generateToken();
+        Http.Context.current().session().remove("token");
+        Http.Context.current().session().put("token", token);
     }
 }

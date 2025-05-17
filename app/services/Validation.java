@@ -3,283 +3,238 @@ package services;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import models.*;
 
 public class Validation {
 
+    private static final Set<ErrorClass> errors = new HashSet<>();
     private static boolean result = true;
 
-    private static Set<ErrorClass> errors = null;
+        /* AUTHOR */
 
-    static {
-        errors = new HashSet<> ();
-    }
+    public static Set<ErrorClass> validateDataAuthor(int option, Author author) {
+        errors.clear();
+        result = true;
 
-    //Completed
-    public static Set<ErrorClass> ValidateDataAuthor (String name, String artisticName, String email, Date birthday, String gender, String biography, byte[] picture) {
+        validateName(author.getName());
+        validateArtisticName(author.getArtisticName());
+        validateBirthday(author.getBirthday());
+        validateGender(author.getGender());
+        validateBiography(author.getBiography());
 
-        Validation.result = true;
-        Validation.errors.clear ();
-        Validation.ValidateName (name);
-        Validation.ValidateArtisticName (artisticName);
-        Validation.ValidateEmail (email);
-        //Validation.ValidateBirthday (birthday);
-        Validation.ValidateGender (gender);
-        Validation.ValidateBiography (biography);
-        Validation.ValidatePicture (picture);
-        return Validation.errors;
-    }
-
-    //Edition Validation
-    //Without Picture's Validation
-    public static Set<ErrorClass> ValidateDataAuthor (String name, String artisticName, String email, Date birthday, String gender, String biography) {
-
-        Validation.result = true;
-        Validation.errors.clear ();
-        Validation.ValidateName (name);
-        Validation.ValidateArtisticName (artisticName);
-        Validation.ValidateEmail (email);
-        //Validation.ValidateBirthday (birthday);
-        Validation.ValidateGender (gender);
-        return Validation.errors;
-    }
-
-    //Without Email and Picture's Validation
-    public static Set<ErrorClass> ValidateDataAuthor (String name, String artisticName, Date birthday, String gender, String biography) {
-
-        Validation.result = true;
-        Validation.errors.clear ();
-        Validation.ValidateName (name);
-        Validation.ValidateArtisticName (artisticName);
-        //Validation.ValidateBirthday (birthday);
-        Validation.ValidateGender (gender);
-        return Validation.errors;
-    }
-
-    private static void ValidateName (String name) {
-
-        if (name != "") {
-            if (name.length () < 3) {
-                Validation.errors.add (new ErrorClass (1, "Invalid character quantity for Name. It must be above 3 characters."));
-                Validation.result = false;
-            }
-        } else {
-            Validation.errors.add (new ErrorClass (1, "Name is empty."));
-            Validation.result = false;
+        if (option == 1) {
+            validatePicture(author.getPicture());
+            validateEmail(author.getEmail());
         }
-    }
 
-    private static void ValidateArtisticName (String artisticName) {
-
-        if (artisticName != "") {
-            if (artisticName.length () < 3) {
-                Validation.errors.add (new ErrorClass (2, "Invalid character quantity for Artistic Name. It must be above 3 characters."));
-                Validation.result = false;
-            }
-        } else {
-            Validation.errors.add (new ErrorClass (2, "Artistic Name is empty."));
-            Validation.result = false;
-        }
-    }
-
-
-    private static void ValidateEmail (String email) {
-
-        if (email != "") {
-            if (Validation.MatchEmail (email)) {
-                if (Validation.GetEmail (email)) {
-                    Validation.errors.add (new ErrorClass (3, "E-mail is already registered."));
-                    Validation.result = false;
-                }
-            } else {
-                Validation.errors.add (new ErrorClass (3, "Invalid E-mail."));
-                Validation.result = false;
-            }
-        } else {
-            Validation.errors.add (new ErrorClass (3, "E-mail is empty."));
-            Validation.result = false;
-        }
-    }
-
-    private static boolean MatchEmail (String email) {
-        String regex = "^([_a-zA-Z0-9-]+(\\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*(\\.[a-zA-Z]{1,6}))?$";
-        Pattern pattern = Pattern.compile (regex);
-        Matcher matcher = pattern.matcher (email);
-        return matcher.matches ();
-    }
-
-    private static boolean GetEmail (String email) {
-
-        Author author = Author.find.where().eq("email", email).findUnique();
-        if(author == null){
-            return false;
-        }
-        return true;
-    }
-
-    private static void ValidateBirthday (String birthday) {
-
-        //
-    }
-
-    private static void ValidateGender (String gender) {
-
-        if (gender != "") {
-            if (!(gender.length () == 1)) {
-                Validation.errors.add (new ErrorClass (5, "Invalid character quantity for Gender. Must be 1 character."));
-                Validation.result = false;
-            }
-        } else {
-            Validation.errors.add (new ErrorClass (5, "Gender is empty."));
-            Validation.result = false;
-        }
-    }
-
-    private static void ValidateBiography (String biography) {
-
-        if (biography != "") {
-            if (biography.length () < 10) {
-                Validation.errors.add (new ErrorClass (6, "Invalid character quantity for Biography. It must be above 10 characters."));
-                Validation.result = false;
-            }
-        } else {
-            Validation.errors.add (new ErrorClass (6, "Biography is empty."));
-            Validation.result = false;
-        }
-    }
-
-    public static boolean DeleteAuthor (int id) {
-
-        List<Book> book = Book.find.where().eq("author_id",id).findList();
-        if(book.size() == 0)
-        {
-            return true;
-        }
-        return false;
-    }
-
-    /* Book's Validations */
-
-    public static Set<ErrorClass> ValidateDataBook (String title, String isbn, Double price, byte[] picture) {
-
-        Validation.result = true;
-        Validation.errors.clear ();
-        Validation.ValidateTitle (title);
-        Validation.ValidateISBN (isbn);
-        Validation.ValidatePrice (price);
-        Validation.ValidatePicture (picture);
         return errors;
     }
 
-    public static Set<ErrorClass> ValidateDataBook (String title, Double price, byte[] picture) {
+    private static void validateName(String name) {
+        name = Optional.ofNullable(name).orElse("");
+        if (name.isEmpty()) {
+            errors.add(new ErrorClass(1, "Name is empty."));
+            result = false;
+        } else if (name.length() < 3) {
+            errors.add(new ErrorClass(1, "Invalid character quantity for Name. It must be at least 3 characters."));
+            result = false;
+        }
+    }
+
+    private static void validateArtisticName(String artisticName) {
+        artisticName = Optional.ofNullable(artisticName).orElse("").trim();
+        if (artisticName.isEmpty()) {
+            errors.add(new ErrorClass(2, "Artistic Name is empty."));
+            result = false;
+        } else if (artisticName.length() < 3) {
+            errors.add(new ErrorClass(2, "Invalid character quantity for Artistic Name. It must be at least 3 characters."));
+            result = false;
+        }
+    }
+
+    private static void validateEmail(String email) {
+        email = Optional.ofNullable(email).orElse("").trim();
+        if (email.isEmpty()) {
+            errors.add(new ErrorClass(3, "E-mail is empty."));
+            result = false;
+        } else if (!matchEmail(email)) {
+            errors.add(new ErrorClass(3, "Invalid E-mail."));
+            result = false;
+        } else if (getEmail(email)) {
+            errors.add(new ErrorClass(3, "E-mail is already registered."));
+            result = false;
+        }
+    }
+
+    private static boolean matchEmail(String email) {
+        String regex = "^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,6}$";
+        return Pattern.compile(regex).matcher(email).matches();
+    }
+
+    private static boolean getEmail(String email) {
+        return Author.find.where().eq("email", email).findUnique() != null;
+    }
+
+    private static void validateBirthday(String birthday) {
+
+        if (!birthday.isEmpty()) {
+            boolean result = true;
+            java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            try {
+                java.time.LocalDate parsedDate = java.time.LocalDate.parse(birthday, formatter);
+                // Você pode adicionar mais validações, como se a data está no passado, se necessário.
+            } catch (java.time.format.DateTimeParseException e) {
+                errors.add(new ErrorClass(4, "Invalid birthday."));
+                result = false;
+            }
+        } else {
+            errors.add(new ErrorClass(4, "Birthday is empty."));
+            result = false;
+        }
+    }
+
+    private static void validateGender(String gender) {
+        gender = Optional.ofNullable(gender).orElse("").trim();
+        if (gender.isEmpty()) {
+            errors.add(new ErrorClass(5, "Gender is empty."));
+            result = false;
+        } else if (gender.length() != 1) {
+            errors.add(new ErrorClass(5, "Invalid character quantity for Gender. Must be 1 character."));
+            result = false;
+        }
+    }
+
+    private static void validateBiography(String biography) {
+        biography = Optional.ofNullable(biography).orElse("").trim();
+        if (biography.isEmpty()) {
+            errors.add(new ErrorClass(6, "Biography is empty."));
+            result = false;
+        } else if (biography.length() < 10) {
+            errors.add(new ErrorClass(6, "Invalid character quantity for Biography. It must be at least 10 characters."));
+            result = false;
+        }
+    }
+
+    public static boolean deleteAuthor(int id) {
+        return Book.find.where().eq("author_id", id).findList().isEmpty();
+    }
+
+        /* BOOK */
+
+    public static Set<ErrorClass> validateDataBook(Integer opc, Book book) {
 
         Validation.result = true;
-        Validation.errors.clear ();
-        Validation.ValidateTitle (title);
-        Validation.ValidatePrice (price);
-        Validation.ValidatePicture (picture);
+        Validation.errors.clear();
+        Validation.validateTitle(book.getTitle());
+        Validation.validatePrice(book.getPrice());
+
+        if (opc == 1) {
+            Validation.validatePicture(book.getPicture());
+            Validation.validateISBN(book.getIsbn());
+        }
+
         return errors;
     }
 
-    public static Set<ErrorClass> ValidateDataBook (String title, Double price) {
-
-        Validation.result = true;
-        Validation.errors.clear ();
-        Validation.ValidateTitle (title);
-        Validation.ValidatePrice (price);
-        return errors;
-    }
-
-    private static void ValidateTitle (String title) {
+    private static void validateTitle(String title) {
 
         if (title != "") {
-            if (title.length () < 3) {
-                Validation.errors.add (new ErrorClass (1, "Invalid character quantity for title. It must be above 3 characters."));
+            if (title.length() < 3) {
+                Validation.errors.add(new ErrorClass(1, "Invalid character quantity for title. It must be above 3 characters."));
                 Validation.result = false;
             }
         } else {
-            Validation.errors.add (new ErrorClass (1, "Title is empty."));
+            Validation.errors.add(new ErrorClass(1, "Title is empty."));
             Validation.result = false;
         }
     }
 
-    private static void ValidateISBN (String isbn) {
+    public static void validateISBN(String isbn) {
+        if (isbn != null && !isbn.trim().isEmpty()) {
 
-        if (isbn != "") {
-            if (isbn.length () == 13) {
-                if (Validation.GetISBN (isbn)) {
-                    Validation.errors.add (new ErrorClass (2, "ISBN is already registered."));
+            String cleanIsbn = isbn.replaceAll("[-\\s]", "");
+
+            if (!validateChecksum(cleanIsbn)) {
+                Validation.errors.add(new ErrorClass(2, "Invalid ISBN."));
+                Validation.result = false;
+            } else {
+                if (getISBN(cleanIsbn)) {
+                    Validation.errors.add(new ErrorClass(2, "ISBN is already registered."));
                     Validation.result = false;
                 }
-            } else {
-                Validation.errors.add (new ErrorClass (2, "Invalid character quantity for ISBN. Must be 13 character."));
-                Validation.result = false;
             }
+
         } else {
-            Validation.errors.add (new ErrorClass (2, "ISBN is empty."));
+            Validation.errors.add(new ErrorClass(2, "ISBN is empty."));
             Validation.result = false;
         }
     }
 
-    private static boolean MatchISBN (String isbn) {
-        String regex = "^\\d{13}$";
-        Pattern pattern = Pattern.compile (regex);
-        Matcher matcher = pattern.matcher (isbn);
-        return matcher.matches ();
+    private static boolean validateChecksum(String isbn) {
+        if (isbn.length() != 13 || !isbn.matches("\\d{13}")) {
+            return false;
+        }
+
+        int sum = 0;
+        for (int i = 0; i < 12; i++) {
+            int digit = Character.getNumericValue(isbn.charAt(i));
+            sum += (i % 2 == 0) ? digit : digit * 3;
+        }
+
+        int checksum = (10 - (sum % 10)) % 10;
+        int lastDigit = Character.getNumericValue(isbn.charAt(12));
+
+        return checksum == lastDigit;
     }
 
-    private static boolean GetISBN (String isbn) {
+    private static boolean getISBN(String isbn) {
         Book book = Book.find.where().eq("isbn", isbn).findUnique();
-        if (book != null) {
-            return true;
-        }
-        return false;
+        return book != null;
     }
 
-    private static void ValidatePrice (Double price) {
+    private static void validatePrice(Double price) {
 
-        if (price.toString () != "") {
+        if (price.toString() != "") {
             if (price < 0) {
-                Validation.errors.add (new ErrorClass (3, "Invalid Price."));
+                Validation.errors.add(new ErrorClass(3, "Invalid Price."));
                 Validation.result = false;
             }
         } else {
-            Validation.errors.add (new ErrorClass (3, "Price is empty."));
+            Validation.errors.add(new ErrorClass(3, "Price is empty."));
             Validation.result = false;
         }
     }
 
-    private static void ValidatePicture (byte[] picture) {
+    private static void validatePicture(byte[] picture) {
 
         if (picture.length == 0) {
-            Validation.errors.add (new ErrorClass (7, "Picture is empty."));
+            Validation.errors.add(new ErrorClass(7, "Picture is empty."));
             Validation.result = false;
         }
     }
 
     //Login's Validations
 
-    public static Set<ErrorClass> ValidateDataLogin (String username, String password) {
+    public static Set<ErrorClass> validateDataLogin(Usersys usersys) {
         Validation.result = true;
-        Validation.errors.clear ();
-        Validation.ValidateUsername (username);
-        Validation.ValidatePassword (password);
+        Validation.errors.clear();
+        Validation.validateUsername(usersys.getUsername());
+        Validation.validatePassword(usersys.getUserpass());
         return errors;
     }
 
-    private static void ValidateUsername(String username) {
+    private static void validateUsername(String username) {
         if (username.equals("")) {
-            Validation.errors.add (new ErrorClass (1, "Username is empty."));
+            Validation.errors.add(new ErrorClass(1, "Username is empty."));
             Validation.result = false;
         }
     }
 
-    private static void ValidatePassword (String password) {
+    private static void validatePassword(String password) {
         if (password.equals("")) {
-            Validation.errors.add (new ErrorClass (1, "Password is empty."));
+            Validation.errors.add(new ErrorClass(1, "Password is empty."));
             Validation.result = false;
         }
     }
-
-
 }

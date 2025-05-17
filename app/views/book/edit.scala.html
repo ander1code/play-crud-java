@@ -51,7 +51,7 @@
 
             <div class="form-group">
                 <label>Picture</label>
-                <a href="@routes.Assets.versioned("pictures/picture_book.jpg")">Current Image</a>
+                <a href="@routes.Assets.versioned("pictures/picture_book.jpg")"><img align="right" class="picture" src="@routes.Assets.versioned("pictures/picture_book.jpg")" alt=""></a>
                 <input type="file" id="picture" name="picture" class="form-control"><br>
             </div>
 
@@ -60,12 +60,12 @@
             </div>
 
             <!-- Actions -->
-            <div class="form-group">
-                <button type="button" class="btn btn-warning col-md-2 float-sm-right" data-toggle="modal" data-target="#modalEdit">EDIT</button>
-                <a href="@routes.AuthorController.details(author.getId())" class="btn btn-default col-md-2 float-sm-right">Cancel</a>
-                <button type="button" class="btn btn-danger col-md-2 float-sm-right" data-toggle="modal" data-target="#modalDelete">DELETE</button>
-            </div>
-            <!-- Actions -->
+			<div class="form-group">
+				<button type="button" class="btn btn-warning col-md-2 pull-right" data-toggle="modal" data-target="#modalEdit">Edit</button>
+				<a href="@routes.AuthorController.details(author.getId())" class="btn btn-default col-md-2 pull-right">Cancel</a>
+				<button type="button" class="btn btn-danger col-md-2 pull-right" data-toggle="modal" data-target="#modalDelete">Delete</button>
+			</div>
+			<!-- Actions -->
 
             <!-- modals -->
             <div id="modalEdit" class="modal fade" role="dialog">
@@ -101,7 +101,6 @@
                 </div>
             </div>
             <!-- modals -->
-
             }
         </div>
     </div>

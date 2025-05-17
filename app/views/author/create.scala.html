@@ -38,7 +38,7 @@
                 <div class="form-group">
                     <label for="">Birthday</label>
                     <div class="input-append date form_datetime" data-date="">
-                        @helper.inputText(frm("birthday"), '_label -> null, 'class -> "form-control", 'readonly -> "readonly")
+                        @helper.inputText(frm("birthday"), '_label -> null, 'class -> "form-control")
                         <span class="add-on"><i class="icon-remove"></i></span>
                         <span class="add-on"><i class="icon-th"></i></span>
                     </div>
@@ -70,13 +70,12 @@
 
                 <!-- Actions -->
                 <div class="form-group">
-                    <input type="submit" class="pull-right btn btn-success col-md-2" value="CREATE" id="btnCreate">
-                    <input type="reset" class="pull-right btn btn-info col-md-2" value="RESET" id="btnReset">
-                    <a href="@routes.AuthorController.index()" class="pull-right btn btn-default col-md-2">CANCEL</a>
+                    <input type="submit" class="pull-right btn btn-success col-md-2" value="Create" id="btnCreate">
+                    <input type="reset" class="pull-right btn btn-info col-md-2" value="Reset" id="btnReset">
+                    <a href="@routes.AuthorController.index()" class="pull-right btn btn-default col-md-2">Cancel</a>
                 </div>
                 <!-- Actions -->
                 }
-
             </div>
         </div>
     </div>

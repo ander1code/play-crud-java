@@ -1,51 +1,40 @@
-# --- Created by Ebean DDL
-# To stop Ebean DDL generation, remove this comment and start using Evolutions
-
 # --- !Ups
 
-create table author (
-  id                            serial not null,
-  name                          varchar(100),
-  artistic_name                 varchar(100),
-  email                         varchar(100),
-  birthday                      timestamp,
-  gender                        varchar(1),
-  biography                     varchar(1000),
-  picture                       bytea,
-  constraint uq_author_email unique (email),
-  constraint pk_author primary key (id)
+CREATE TABLE author (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name VARCHAR(100),
+  artistic_name VARCHAR(100),
+  email VARCHAR(100),
+  birthday TIMESTAMP,
+  gender VARCHAR(1),
+  biography VARCHAR(1000),
+  picture BLOB,
+  CONSTRAINT uq_author_email UNIQUE (email)
 );
 
-create table book (
-  id                            serial not null,
-  author_id                     integer,
-  isbn                          varchar(13),
-  title                         varchar(100),
-  price                         float(12,2),
-  picture                       bytea,
-  constraint uq_book_isbn unique (isbn),
-  constraint pk_book primary key (id)
+CREATE TABLE book (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  author_id INTEGER,
+  isbn VARCHAR(13),
+  title VARCHAR(100),
+  price REAL,
+  picture BLOB,
+  CONSTRAINT uq_book_isbn UNIQUE (isbn),
+  FOREIGN KEY(author_id) REFERENCES author(id) ON DELETE RESTRICT ON UPDATE RESTRICT
 );
 
-create table usersys (
-  id                            serial not null,
-  username                      varchar(128),
-  userpass                      varchar(128),
-  constraint pk_usersys primary key (id)
+CREATE TABLE usersys (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  username VARCHAR(128),
+  userpass VARCHAR(128)
 );
 
-alter table book add constraint fk_book_author_id foreign key (author_id) references author (id) on delete restrict on update restrict;
-create index ix_book_author_id on book (author_id);
+CREATE INDEX ix_book_author_id ON book(author_id);
 
 
 # --- !Downs
 
-alter table if exists book drop constraint if exists fk_book_author_id;
-drop index if exists ix_book_author_id;
-
-drop table if exists author cascade;
-
-drop table if exists book cascade;
-
-drop table if exists usersys cascade;
-
+DROP INDEX IF EXISTS ix_book_author_id;
+DROP TABLE IF EXISTS usersys;
+DROP TABLE IF EXISTS book;
+DROP TABLE IF EXISTS author;

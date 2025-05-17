@@ -1,12 +1,14 @@
 $(document).ready(function () {
 	$(".form_datetime").datetimepicker({
-		format: "yyyy-mm-dd",
-		pickTime: false,
-		autoclose: true,
-		linkField: "birthday",
-		linkFormat: "yyyy-mm-dd",
-		viewMode: 'years'
-	});
+        format: "dd/mm/yyyy", // Define o formato da entrada como dd/mm/yyyy
+        minView: 2, // Permite apenas a seleção de dia, mês e ano
+        autoclose: true, // Fecha automaticamente após a seleção
+        todayHighlight: true, // Destaca a data atual
+        linkField: "birthday",
+        linkFormat: "yyyy-mm-dd", // Define o formato do valor enviado como yyyy-mm-dd
+        startView: 2, // Começa na visualização de meses
+        forceParse: false // Evita erros de formatação
+    });
 });
 
 $("#password").val("Admin121181");
@@ -14,7 +16,7 @@ $("#password").val("Admin121181");
 $("#isbn").attr("maxlength", "13");
 $("#title").attr("maxlength", "100");
 
-
+/*
 $("#isbn").keydown(function (e) {
 	// Allow: backspace, delete, tab, escape, enter and .
 	if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
@@ -30,6 +32,7 @@ $("#isbn").keydown(function (e) {
 		e.preventDefault();
 	}
 });
+*/
 
 $(function () {
 	$('#price').maskMoney({
@@ -41,7 +44,7 @@ $(function () {
 $("#isbn").attr("maxlength", "13");
 $("#title").attr("maxlength", "100");
 
-
+/*
 $("#isbn").keydown(function (e) {
 	// Allow: backspace, delete, tab, escape, enter and .
 	if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
@@ -57,6 +60,8 @@ $("#isbn").keydown(function (e) {
 		e.preventDefault();
 	}
 });
+*/
+
 
 $(function () {
 	$('#price').maskMoney({
